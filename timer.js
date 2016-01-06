@@ -2,19 +2,28 @@
 Timer = class Timer{
   constructor(delay, callback){
     this._delay = delay;
-    this._fn = callback;
+    this._fn = callback || function nullFn(a, data){};
+
   }
 
   start(opt_data) {
     if (this.timerId) this.stop();
 
-    this._timerId = setTimeout(this._callback, this.delay, opt_data);
+    var that = this;
+    var cb = function(){
+      that.callback.call({}, that, that.data);
+    }
+    this._timerId = setTimeout(cb, this.delay, opt_data);
   }
 
   startPeriodic(opt_data) {
     if (this.timerId) this.stop();
 
-    this._timerId = setInterval(this._callback, this.delay, opt_data);
+    var that = this;
+    var cb = function(){
+      that.callback.call({}, that, that.data);
+    }
+    this._timerId = setInterval(cb, this.delay, opt_data);
   }
 
   stop() {
@@ -25,12 +34,6 @@ Timer = class Timer{
   restart(opt_data) {
     this.stop();
     this.start();
-  }
-
-  _callback() {
-    if (this.callback){
-      this.callback.call({}, this, this.data);
-    }
   }
 
   get timerId(){
