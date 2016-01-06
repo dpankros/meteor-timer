@@ -14,6 +14,7 @@ Timer = class Timer{
       that.callback.call({}, that, that.data);
     }
     this._timerId = setTimeout(cb, this.delay, opt_data);
+    return this;
   }
 
   startPeriodic(opt_data) {
@@ -24,16 +25,19 @@ Timer = class Timer{
       that.callback.call({}, that, that.data);
     }
     this._timerId = setInterval(cb, this.delay, opt_data);
+    return this;
   }
 
   stop() {
     clearInterval(this.timerId);
     this.timerId = undefined;
+    return this;
   }
 
   restart(opt_data) {
     this.stop();
     this.start();
+    return this;
   }
 
   get timerId(){
